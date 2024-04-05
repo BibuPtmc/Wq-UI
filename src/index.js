@@ -1,17 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import RegistrationForm from './register/RegistrationForm';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RegistrationForm />
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+
+
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import { BrowserRouter as Router, Route } from 'react-router-dom';
+// import RegistrationForm from './src/registration-form/RegistrationForm.jsx';
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <Router>
+//       <Route exact path="/" component={RegistrationForm} />
+//     </Router>
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );
+
+
