@@ -1,30 +1,20 @@
+
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Importez également Routes
 import RegistrationForm from './register/RegistrationForm';
+import HomePage from './HomePage';
 import 'bootstrap/dist/css/bootstrap.css';
+import "./../node_modules/bootstrap/dist/css/bootstrap.min.css"
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+
 root.render(
-  <React.StrictMode>
-    <RegistrationForm />
-  </React.StrictMode>
+  <Router>
+    <Routes> {/* Remplacez Route par Routes */}
+      <Route exact path="/" element={<RegistrationForm />} /> {/* Utilisez l'attribut element pour spécifier le composant */}
+      <Route path="/register" element={<RegistrationForm />} />
+    </Routes>
+  </Router>
 );
-
-
-
-
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import RegistrationForm from './src/registration-form/RegistrationForm.jsx';
-
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <Router>
-//       <Route exact path="/" component={RegistrationForm} />
-//     </Router>
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
-
-

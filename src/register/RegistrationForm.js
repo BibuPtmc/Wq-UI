@@ -1,29 +1,48 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import api from '../hooks/api';
+import { Form, Button, Alert } from 'react-bootstrap';
+import axios from 'axios'
+
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     userName: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    matchingPassword: '',
     firstName: '',
     lastName: '',
     birthDay: ''
   });
 
+  const [passwordsMatch, setPasswordsMatch] = useState(true); // Ajout d'un état pour indiquer si les mots de passe correspondent
+  const [registrationSuccess, setRegistrationSuccess] = useState(false); // État pour suivre si l'enregistrement a réussi
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setPasswordsMatch(true);  // Réinitialiser l'état des mots de passe correspondants lorsque l'utilisateur modifie le champ de confirmation de mot de passe
+    setRegistrationSuccess(false); // Réinitialiser l'état de la réussite de l'enregistrement à false lorsqu'une modification est apportée
+
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Vérifier si les mots de passe correspondent
+    if (formData.password !== formData.matchingPassword) {
+      setPasswordsMatch(false); // Mettre à jour l'état pour indiquer que les mots de passe ne correspondent pas
+      return; // Arrêter la soumission du formulaire
+    }
+
     try {
-      const response = await api.post('/api/client/register', formData);
+      const response = await axios.post('http://localhost:8080/api/client/register', formData);
       console.log('Inscription réussie :', response.data);
       localStorage.setItem('token', response.data.token);
+      setRegistrationSuccess(true);
+
     } catch (error) {
       console.error('Erreur lors de l\'inscription :', error);
     }
@@ -67,16 +86,21 @@ const RegistrationForm = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="formConfirmPassword">
+      <Form.Group controlId="formMatchingPassword">
         <Form.Label>Confirmer le mot de passe</Form.Label>
         <Form.Control
           type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
+          name="matchingPassword"
+          value={formData.matchingPassword}
           onChange={handleChange}
           placeholder="Confirmez le mot de passe"
           required
+          isInvalid={!passwordsMatch} // Marquer le champ comme invalide si les mots de passe ne correspondent pas
         />
+        {/* Afficher un message d'erreur si les mots de passe ne correspondent pas */}
+        {!passwordsMatch && (
+          <Form.Control.Feedback type="invalid">Les mots de passe ne correspondent pas</Form.Control.Feedback>
+        )}
       </Form.Group>
 
       <Form.Group controlId="formFirstName">
@@ -114,10 +138,25 @@ const RegistrationForm = () => {
         />
       </Form.Group>
 
+      <Form.Group className="mb-3">
+        <Form.Check
+          required
+          label="Agree to terms and conditions"
+          feedback="You must agree before submitting."
+          feedbackType="invalid"
+        />
+      </Form.Group>
       <Button variant="primary" type="submit">
         S'inscrire
       </Button>
+      {registrationSuccess && ( // Afficher le message de succès uniquement si l'enregistrement a réussi
+        <Alert variant="success">
+          Enregistrement terminé avec succès !
+        </Alert>
+      )}
+
     </Form>
+    
   );
 };
 
